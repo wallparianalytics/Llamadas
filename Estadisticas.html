@@ -1,0 +1,25 @@
+<div class="contenido" id="estadisticas">
+  <p>Solo coordinadores pueden ver las estadísticas.</p>
+  <div id="chart_div" style="width:100%;height:400px"></div>
+</div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded',function(){
+    if(usuario.rol!='Coordinador'){document.getElementById('estadisticas').innerHTML='No autorizado';return;}
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+  });
+
+  function drawChart(){
+    google.script.run.withSuccessHandler(function(res){
+      if(!res) return;
+      var data=new google.visualization.DataTable();
+      data.addColumn('string','Monitor');
+      data.addColumn('number','Total');
+      data.addColumn('number','Efectivas');
+      data.addRows(res);
+      var chart=new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      chart.draw(data,{title:'Llamadas por monitor',colors:['#1976D2','#FFC107']});
+    }).datosEstadisticas();
+  }
+</script>

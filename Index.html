@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-blue.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+      body{background:#F5F5F5;font-family:'Roboto',sans-serif;}
+      .header{background:#0D47A1;color:white;padding:10px;display:flex;justify-content:space-between;align-items:center;}
+      .tabs{width:100%;}
+      .contenido{padding:20px;}
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div><svg height="32" viewBox="0 0 24 24" fill="#FFC107"><path d="M12 2L1.5 21h21L12 2z"/></svg> Seguimiento</div>
+      <button class="mdl-button mdl-js-button mdl-button--raised" onclick="logout()">Cerrar sesión</button>
+    </div>
+    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect tabs">
+      <div class="mdl-tabs__tab-bar">
+        <a href="#tab1" class="mdl-tabs__tab is-active">Seguimiento de llamadas</a>
+        <a href="#tab2" class="mdl-tabs__tab">Estadísticas</a>
+        <a href="#tab3" class="mdl-tabs__tab">Próximamente</a>
+      </div>
+      <div class="mdl-tabs__panel is-active" id="tab1">
+        <?!= include('Seguimiento'); ?>
+      </div>
+      <div class="mdl-tabs__panel" id="tab2">
+        <?!= include('Estadisticas'); ?>
+      </div>
+      <div class="mdl-tabs__panel" id="tab3">
+        <div class="contenido">Próximamente</div>
+      </div>
+    </div>
+    <script>
+      var usuario = <?= JSON.stringify(usuario) ?>;
+      function logout(){
+        google.script.run.withSuccessHandler(function(){location.reload();}).cerrarSesion();
+      }
+    </script>
+  </body>
+</html>
