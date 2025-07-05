@@ -1,0 +1,58 @@
+<div class="contenido">
+  <div id="vistaMonitor" style="display:none;">
+    <table class="mdl-data-table mdl-js-data-table" id="tablaCasos">
+      <thead>
+        <tr><th>DNI</th><th>Nombre</th><th>Teléfono</th><th>#Intentos</th><th>Estado</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div id="vistaCoord" style="display:none;">
+    <select id="periodo" onchange="cargarResumen()">
+      <option value="1">24h</option>
+      <option value="7">7 días</option>
+      <option value="30">30 días</option>
+      <option value="365">Todo</option>
+    </select>
+    <table class="mdl-data-table mdl-js-data-table" id="tablaResumen">
+      <thead><tr><th>Monitor</th><th>Total</th><th>Contestadas</th><th>Efectivas</th><th>Prom. min en app</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded',function(){
+    if(usuario.rol=='Coordinador'){
+      document.getElementById('vistaCoord').style.display='block';
+      cargarResumen();
+    }else{
+      document.getElementById('vistaMonitor').style.display='block';
+      cargarCasos();
+    }
+  });
+
+  function cargarCasos(){
+    google.script.run.withSuccessHandler(function(data){
+      var tbody=document.querySelector('#tablaCasos tbody');
+      tbody.innerHTML='';
+      data.forEach(function(r){
+        var tr=document.createElement('tr');
+        tr.innerHTML='<td>'+r.dni+'</td><td>'+r.nombre+'</td><td>'+r.telefono+'</td><td>'+r.intentos+'</td><td>'+r.estado+'</td>';
+        tbody.appendChild(tr);
+      });
+    }).obtenerCasos();
+  }
+
+  function cargarResumen(){
+    var p=document.getElementById('periodo').value;
+    google.script.run.withSuccessHandler(function(data){
+      var tbody=document.querySelector('#tablaResumen tbody');
+      tbody.innerHTML='';
+      data.forEach(function(r){
+        var tr=document.createElement('tr');
+        tr.innerHTML='<td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td>';
+        tbody.appendChild(tr);
+      });
+    }).obtenerResumen(parseInt(p));
+  }
+</script>
