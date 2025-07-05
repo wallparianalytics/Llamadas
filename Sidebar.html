@@ -1,0 +1,9 @@
+<aside style="padding:10px;background:#EEE">
+  <h5>Actividad reciente</h5>
+  <div id="resumen"></div>
+</aside>
+<script>
+  google.script.run.withSuccessHandler(function(res){
+    document.getElementById('resumen').innerText=res;
+  }).dummy=function(){return '';};
+</script>
